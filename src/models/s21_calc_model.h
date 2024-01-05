@@ -19,9 +19,9 @@ class CalcModel {
  public:
   CalcModel() {};
   virtual ~CalcModel() {};
-  bool Dijkstra(const std::string& input);
-  bool ScanRpn(const std::string& input, std::string& result);
-
+  bool Dijkstra(std::string& input);
+  bool ScanRpn(std::string& input);
+  double GetResult() { return result_; }
 
  private:
   std::stack<std::string> operators_stack_{};
@@ -30,7 +30,7 @@ class CalcModel {
   bool IsFunction(std::string str) noexcept;
   bool IsDelim(char c) noexcept;
   bool GetOperatorPriority(std::string);
-  std::string GetToken(std::string token, std::string prog, size_t& i);
+  std::string GetToken(std::string &token, std::string &prog, size_t& i);
   bool InsertTokenToStack(std::string token);
   bool Sum();
   bool Multiplication();
@@ -50,7 +50,7 @@ class CalcModel {
   bool CountFunction();
   int CountChars(const std::string& str, char c);
   bool Calculate();
-  bool Unaries(const std::string& input, std::string& dest);
+  bool Unaries(std::string& input, std::string& dest);
 };
 
 }  // namespace s21

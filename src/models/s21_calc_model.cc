@@ -31,17 +31,15 @@ bool CalcModel::GetOperatorPriority(std::string op) {
     return -1;  // error: unknown operator
 }
 
-std::string CalcModel::GetToken(std::string token, std::string prog,
+std::string CalcModel::GetToken(std::string &token, std::string &prog,
                                 size_t& i) {
-  token.clear();
-
+  if (!token.empty()) { token.clear(); }
   if (prog.empty()) return token;
 
   while (std::isspace(prog[0])) {
     prog.erase(0, 1);
     ++i;
   }
-
   if (prog.find_first_of("+-*/%^()") != std::string::npos) {
     token += prog[0];
     prog.erase(0, 1);
@@ -53,7 +51,7 @@ std::string CalcModel::GetToken(std::string token, std::string prog,
       ++i;
     }
   } else if (std::isdigit(prog[0])) {
-    while (!std::ispunct(prog[0]) && !std::isspace(prog[0])) {
+    while (prog[0] && !std::ispunct(prog[0]) && !std::isspace(prog[0])) {
       token += prog[0];
       prog.erase(0, 1);
       ++i;
@@ -108,13 +106,14 @@ bool CalcModel::InsertTokenToStack(std::string token) {
   return true;
 }
 
-bool CalcModel::Dijkstra(const std::string& input) {
-  if (input.empty()) return false;
+bool CalcModel::Dijkstra(std::string& input) {
+  if (input.empty()) { return false; }
 
   size_t i = 0;
-  std::string token;
-  while (i < input.length()) {
-    GetToken(token, input, i);
+  std::string token = "";
+  while (i < input.size()) {
+    std::string tmp = input.substr(i);
+    GetToken(token, tmp, i);
     if (token.empty() || !InsertTokenToStack(token)) {
       while (!operators_stack_.empty()) operators_stack_.pop();
 
@@ -435,6 +434,7 @@ int CalcModel::CountChars(const std::string& str, char c) {
 bool CalcModel::Calculate() {
   bool flag = false;
 
+  std::cout << "op" << operators_stack_.empty();
   while (!operators_stack_.empty()) {
     if (!operators_stack_.empty() && !operators_stack_.top().empty() &&
         (CountChars(operators_stack_.top(), ',') > 1 ||
@@ -459,24 +459,26 @@ bool CalcModel::Calculate() {
     operators_stack_.pop();
   }
 
+  result_ = values_stack_.top();
   return !flag;
 }
 
-bool CalcModel::Unaries(const std::string& input, std::string& dest) {
+bool CalcModel::Unaries(std::string& input, std::string& dest) {
   std::string token, prev_token, copy;
-  size_t i = 0, prev_i;
-
-  while (i < input.size()) {
+  size_t i = 0, prev_i, input_size = input.size();
+  while (i < input_size) {
+    
     prev_i = i;
-    GetToken(token, input, i);
+    std::string tmp = input.substr(i);
+    GetToken(token, tmp, i);
     if (prev_i == i) break;
 
     if (token.empty()) {
       return false;
     }
 
-    if ((prev_token.empty() || (IsDelim(prev_token[0]) && prev_token != ")")) &&
-        (token == "+" || token == "-")) {
+    if ((prev_token.empty() || (IsDelim(prev_token[0]) && prev_token != "(")) &&
+            (token == "+" || token == "-")) {
       if (prev_token == "+" && (token == "+"))
         return false;
       else if (prev_token == "+" && token == "-")
@@ -489,7 +491,8 @@ bool CalcModel::Unaries(const std::string& input, std::string& dest) {
         copy += '(';
         copy += '0';
         copy += token[0];
-        GetToken(token, input, i);
+        tmp = input.substr(i);
+        GetToken(token, tmp, i);
         if (IsFunction(token)) {
           copy += '1';
           copy += ')';
@@ -506,12 +509,11 @@ bool CalcModel::Unaries(const std::string& input, std::string& dest) {
 
     prev_token = token;
   }
-
   dest = copy;
   return true;
 }
 
-bool CalcModel::ScanRpn(const std::string& input, std::string& result) {
+bool CalcModel::ScanRpn(std::string& input) {
   if (input.empty()) {
     std::cerr << "Input string is empty." << std::endl;
     return false;
@@ -524,10 +526,12 @@ bool CalcModel::ScanRpn(const std::string& input, std::string& result) {
   }
 
   std::string processedInput;
+  std::cout << "input" << input << std::endl;
   if (!Unaries(input, processedInput)) {
     std::cerr << "Failed to process unary operators." << std::endl;
     return false;
   }
+  std::cout << "processed: " << processedInput << std::endl;
 
   if (!Dijkstra(processedInput)) {
     std::cerr << "Failed to convert to RPN." << std::endl;
@@ -547,6 +551,8 @@ bool CalcModel::ScanRpn(const std::string& input, std::string& result) {
 int main() {
   s21::CalcModel calc_model;
   std::string result;
-  calc_model.ScanRpn("1 + 1", result);
+  std::string input = "1 + 1";
+  calc_model.ScanRpn(input);
+  std::cout << "result" << calc_model.GetResult();
   return 0;
 }
