@@ -21,12 +21,12 @@ class CalcModel {
   virtual ~CalcModel() {};
   bool Dijkstra(std::string& input);
   bool ScanRpn(std::string& input);
-  double GetResult() { return result_; }
+  std::string GetResult() { if (!result_.empty()) return result_.top(); }
 
  private:
   std::stack<std::string> operators_stack_{};
-  std::stack<double> values_stack_{};
-  double result_{};
+  std::stack<std::string> values_stack_{};
+  std::stack<std::string> result_{};
   bool IsFunction(std::string str) noexcept;
   bool IsDelim(char c) noexcept;
   bool GetOperatorPriority(std::string);

@@ -98,7 +98,7 @@ bool CalcModel::InsertTokenToStack(std::string token) {
       }
     }
   } else {
-    double value;
+    std::string value;
     std::istringstream(token) >> value;
     values_stack_.push(value);
   }
@@ -121,17 +121,20 @@ bool CalcModel::Dijkstra(std::string& input) {
 
       return false;
     }
+    std::cout << "TOKEN" << token << std::endl;
   }
 
+  std::string delim;
   while (!operators_stack_.empty()) {
     if (!values_stack_.empty()) {
-      values_stack_.pop();
+      delim = operators_stack_.top();
+      values_stack_.push(delim);
     }
-
     operators_stack_.pop();
   }
 
-  result_ = (!values_stack_.empty()) ? values_stack_.top() : 0.0;
+  // result_ = (!values_stack_.empty()) ? stod(values_stack_.top()) : 0.0;
+  // std::cout << "RESULT_" << result_ << std::endl;
   return true;
 }
 
@@ -140,15 +143,16 @@ bool CalcModel::Sum() {
     return false;
   }
 
-  double operand1 = values_stack_.top();
+  double operand1 = stod(values_stack_.top());
   values_stack_.pop();
 
-  double operand2 = values_stack_.top();
+  double operand2 = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = operand1 + operand2;
 
-  values_stack_.push(result);
+  result_.push(std::to_string(result));
+  std::cout << "SUM res " << result_.top() << "\n";
   return true;
 }
 
@@ -157,10 +161,10 @@ bool CalcModel::Division() {
     return false;
   }
 
-  double operand2 = values_stack_.top();
+  double operand2 = stod(values_stack_.top());
   values_stack_.pop();
 
-  double operand1 = values_stack_.top();
+  double operand1 = stod(values_stack_.top());
   values_stack_.pop();
 
   if (operand2 == 0.0) {
@@ -169,7 +173,7 @@ bool CalcModel::Division() {
 
   double result = operand1 / operand2;
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -178,15 +182,15 @@ bool CalcModel::Multiplication() {
     return false;
   }
 
-  double operand1 = values_stack_.top();
+  double operand1 = stod(values_stack_.top());
   values_stack_.pop();
 
-  double operand2 = values_stack_.top();
+  double operand2 = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = operand1 * operand2;
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -195,15 +199,15 @@ bool CalcModel::Difference() {
     return false;
   }
 
-  double operand2 = values_stack_.top();
+  double operand2 = stod(values_stack_.top());
   values_stack_.pop();
 
-  double operand1 = values_stack_.top();
+  double operand1 = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = operand1 - operand2;
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -212,15 +216,15 @@ bool CalcModel::Mod() {
     return false;
   }
 
-  double operand2 = values_stack_.top();
+  double operand2 = stod(values_stack_.top());
   values_stack_.pop();
 
-  double operand1 = values_stack_.top();
+  double operand1 = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = fmod(operand1, operand2);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -229,15 +233,15 @@ bool CalcModel::Power() {
     return false;
   }
 
-  double exponent = values_stack_.top();
+  double exponent = stod(values_stack_.top());
   values_stack_.pop();
 
-  double base = values_stack_.top();
+  double base = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = pow(base, exponent);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -246,12 +250,12 @@ bool CalcModel::Sinus() {
     return false;
   }
 
-  double angle = values_stack_.top();
+  double angle = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = sin(angle);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -260,12 +264,12 @@ bool CalcModel::Cosinus() {
     return false;
   }
 
-  double angle = values_stack_.top();
+  double angle = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = cos(angle);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -274,12 +278,12 @@ bool CalcModel::Tangent() {
     return false;
   }
 
-  double angle = values_stack_.top();
+  double angle = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = tan(angle);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -288,12 +292,12 @@ bool CalcModel::Atangent() {
     return false;
   }
 
-  double value = values_stack_.top();
+  double value = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = atan(value);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -302,12 +306,12 @@ bool CalcModel::Asinus() {
     return false;
   }
 
-  double value = values_stack_.top();
+  double value = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = asin(value);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -316,12 +320,12 @@ bool CalcModel::Acosinus() {
     return false;
   }
 
-  double value = values_stack_.top();
+  double value = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = acos(value);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -330,12 +334,12 @@ bool CalcModel::Square() {
     return false;
   }
 
-  double value = values_stack_.top();
+  double value = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = sqrt(value);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -344,12 +348,12 @@ bool CalcModel::LnFunc() {
     return false;
   }
 
-  double value = values_stack_.top();
+  double value = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = log(value);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
@@ -358,24 +362,26 @@ bool CalcModel::LogFunc() {
     return false;
   }
 
-  double value = values_stack_.top();
+  double value = stod(values_stack_.top());
   values_stack_.pop();
 
   double result = log10(value);
 
-  values_stack_.push(result);
+  values_stack_.push(std::to_string(result));
   return true;
 }
 
 bool CalcModel::CountFunction() {
-  if (operators_stack_.empty() || values_stack_.empty()) {
+  if (values_stack_.empty()) {
     return false;
   }
 
-  std::string token = operators_stack_.top();
-  operators_stack_.pop();
+  std::string token = values_stack_.top();
+  std::cout << "CF top: " << values_stack_.top() << "\n";
+  values_stack_.pop();
+  std::cout << "CF top: " << values_stack_.top() << "\n";
 
-  bool flag = false;
+  bool flag = true;
 
   if (token == "+") {
     flag = Sum();
@@ -409,8 +415,8 @@ bool CalcModel::CountFunction() {
     flag = LogFunc();
   }
 
-  if (values_stack_.top() != floor(values_stack_.top())) {
-    std::string resultString = std::to_string(values_stack_.top());
+  if (stod(result_.top()) != floor(stod(result_.top()))) {
+    std::string resultString = result_.top();
     size_t i = resultString.length() - 1;
 
     while (i > 0 && (resultString[i] == '0' || resultString[i] == '.')) {
@@ -421,7 +427,8 @@ bool CalcModel::CountFunction() {
       i--;
     }
 
-    values_stack_.top() = std::stod(resultString.substr(0, i + 1));
+    result_.top() = resultString.substr(0, i + 1);
+    std::cout << "res:" << result_.top();
   }
 
   return flag;
@@ -432,35 +439,38 @@ int CalcModel::CountChars(const std::string& str, char c) {
 }
 
 bool CalcModel::Calculate() {
-  bool flag = false;
+  bool flag = true;
 
-  std::cout << "op" << operators_stack_.empty();
-  while (!operators_stack_.empty()) {
-    if (!operators_stack_.empty() && !operators_stack_.top().empty() &&
-        (CountChars(operators_stack_.top(), ',') > 1 ||
-         CountChars(operators_stack_.top(), '.') > 1)) {
-      flag = true;
-      while (!values_stack_.empty()) {
-        values_stack_.pop();
-      }
+  while (values_stack_.size() > 0) {
+    std::cout << "top: " << values_stack_.top() << "\n";
+    if (CountChars(values_stack_.top(), ',') > 1 ||
+         CountChars(values_stack_.top(), '.') > 1) {
+      flag = false;
       break;
-    } else if (values_stack_.empty() && !IsDelim(operators_stack_.top()[0]) &&
-               !IsFunction(operators_stack_.top())) {
-      values_stack_.push(atof(operators_stack_.top().c_str()));
-    } else if (IsDelim(operators_stack_.top()[0]) ||
-               IsFunction(operators_stack_.top())) {
+    } else if (result_.empty() && !IsDelim(values_stack_.top()[0]) &&
+               !IsFunction(values_stack_.top())) {
+                std::cout << "kek1: " << values_stack_.top() << "\n";
+      result_.push(values_stack_.top());
+      values_stack_.pop();
+    } else if (IsDelim(values_stack_.top()[0]) ||
+               IsFunction(values_stack_.top())) {
+      std::cout << "kek2: " << values_stack_.top() << "\n";
       flag = CountFunction();
-      if (flag) break;
+      if (!flag) break;
     } else {
-      double value = atof(operators_stack_.top().c_str());
-      values_stack_.push(value);
+      std::cout << "kek3: " << values_stack_.top() << "\n";
+      std::string value = values_stack_.top();
+      values_stack_.pop();
+      result_.push(value);
+      std::cout << result_.top() ;
     }
-
-    operators_stack_.pop();
+    std::cout << "??\n";
+    // values_stack_.pop();
+    // std::cout << "kek4: " << values_stack_.top() << "\n";
   }
 
-  result_ = values_stack_.top();
-  return !flag;
+  // result_ = stod(values_stack_.top());
+  return flag;
 }
 
 bool CalcModel::Unaries(std::string& input, std::string& dest) {
@@ -551,7 +561,7 @@ bool CalcModel::ScanRpn(std::string& input) {
 int main() {
   s21::CalcModel calc_model;
   std::string result;
-  std::string input = "1 + 1";
+  std::string input = "1+3";
   calc_model.ScanRpn(input);
   std::cout << "result" << calc_model.GetResult();
   return 0;
