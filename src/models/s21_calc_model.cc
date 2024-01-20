@@ -176,7 +176,7 @@ bool CalcModel::Division() {
 
   double result = operand1 / operand2;
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -193,7 +193,7 @@ bool CalcModel::Multiplication() {
 
   double result = operand1 * operand2;
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -210,7 +210,8 @@ bool CalcModel::Difference() {
 
   double result = operand1 - operand2;
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
+  std::cout << "DIFF res " << result_.top() << "\n";
   return true;
 }
 
@@ -227,7 +228,7 @@ bool CalcModel::Mod() {
 
   double result = fmod(operand1, operand2);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -244,7 +245,7 @@ bool CalcModel::Power() {
 
   double result = pow(base, exponent);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -258,7 +259,7 @@ bool CalcModel::Sinus() {
 
   double result = sin(angle);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -272,7 +273,7 @@ bool CalcModel::Cosinus() {
 
   double result = cos(angle);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -286,7 +287,7 @@ bool CalcModel::Tangent() {
 
   double result = tan(angle);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -300,7 +301,7 @@ bool CalcModel::Atangent() {
 
   double result = atan(value);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -314,7 +315,7 @@ bool CalcModel::Asinus() {
 
   double result = asin(value);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -328,7 +329,7 @@ bool CalcModel::Acosinus() {
 
   double result = acos(value);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -342,7 +343,7 @@ bool CalcModel::Square() {
 
   double result = sqrt(value);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -356,7 +357,7 @@ bool CalcModel::LnFunc() {
 
   double result = log(value);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -370,7 +371,7 @@ bool CalcModel::LogFunc() {
 
   double result = log10(value);
 
-  values_stack_.push(std::to_string(result));
+  result_.push(std::to_string(result));
   return true;
 }
 
@@ -444,6 +445,12 @@ int CalcModel::CountChars(const std::string& str, char c) {
 bool CalcModel::Calculate() {
   bool flag = true;
 
+  // std::cout << "STACK\n";
+  // while (values_stack_.size() > 0) {
+  //   std::cout << values_stack_.top();
+  //   values_stack_.pop();
+  // }
+
   while (values_stack_.size() > 0) {
     std::cout << "top: " << values_stack_.top() << "\n";
     if (CountChars(values_stack_.top(), ',') > 1 ||
@@ -465,7 +472,7 @@ bool CalcModel::Calculate() {
       std::string value = values_stack_.top();
       values_stack_.pop();
       result_.push(value);
-      std::cout << result_.top() ;
+      std::cout << "kek 3 res: " << result_.top() ;
     }
     std::cout << "??\n";
     // values_stack_.pop();
@@ -564,7 +571,7 @@ bool CalcModel::ScanRpn(std::string& input) {
 int main() {
   s21::CalcModel calc_model;
   std::string result;
-  std::string input = "100+33";
+  std::string input = "100/50";
   calc_model.ScanRpn(input);
   std::cout << "result" << calc_model.GetResult();
   return 0;
