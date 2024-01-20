@@ -21,7 +21,12 @@ class CalcModel {
   virtual ~CalcModel() {};
   bool Dijkstra(std::string& input);
   bool ScanRpn(std::string& input);
-  std::string GetResult() { if (!result_.empty()) return result_.top(); }
+  std::string GetResult() { 
+    if (!result_.empty()) {
+      return result_.top();}
+    else {
+      return 0; }
+    }
 
  private:
   std::stack<std::string> operators_stack_{};

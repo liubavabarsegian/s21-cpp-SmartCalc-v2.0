@@ -40,24 +40,27 @@ std::string CalcModel::GetToken(std::string &token, std::string &prog,
     prog.erase(0, 1);
     ++i;
   }
-  if (prog.find_first_of("+-*/%^()") != std::string::npos) {
+  if (!std::isdigit(prog[0]) && prog.find_first_of("+-*/%^()") != std::string::npos) {
     token += prog[0];
     prog.erase(0, 1);
+    std::cout << "hm 1 : " << token << "\n";
     ++i;
   } else if (std::isalpha(prog[0])) {
     while (!std::ispunct(prog[0]) && !std::isspace(prog[0])) {
       token += prog[0];
       prog.erase(0, 1);
       ++i;
+      std::cout << "hm 2 : " << token << "\n";
     }
   } else if (std::isdigit(prog[0])) {
     while (prog[0] && !std::ispunct(prog[0]) && !std::isspace(prog[0])) {
       token += prog[0];
       prog.erase(0, 1);
       ++i;
+      std::cout << "hm 3 : " << token << "\n";
     }
   }
-
+  std::cout << "hm token : " << token << "\n";
   return token;
 }
 
@@ -561,7 +564,7 @@ bool CalcModel::ScanRpn(std::string& input) {
 int main() {
   s21::CalcModel calc_model;
   std::string result;
-  std::string input = "1+3";
+  std::string input = "100+33";
   calc_model.ScanRpn(input);
   std::cout << "result" << calc_model.GetResult();
   return 0;
