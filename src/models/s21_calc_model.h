@@ -34,7 +34,7 @@ class CalcModel {
   std::stack<std::string> result_{};
   bool IsFunction(std::string str) noexcept;
   bool IsDelim(char c) noexcept;
-  bool GetOperatorPriority(std::string);
+  int GetOperatorPriority(std::string);
   std::string GetToken(std::string &token, std::string &prog, size_t& i);
   bool InsertTokenToStack(std::string token);
   bool Sum();

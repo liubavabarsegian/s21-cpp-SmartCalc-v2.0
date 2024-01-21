@@ -16,7 +16,7 @@ bool CalcModel::IsDelim(char c) noexcept {
   return delimeters.count(c) > 0;
 }
 
-bool CalcModel::GetOperatorPriority(std::string op) {
+int CalcModel::GetOperatorPriority(std::string op) {
   if (op == "(")
     return 3;
   else if (op == "^")
@@ -36,63 +36,70 @@ std::string CalcModel::GetToken(std::string &token, std::string &prog,
   if (!token.empty()) { token.clear(); }
   if (prog.empty()) return token;
 
-  while (std::isspace(prog[0])) {
+  while (!prog.empty() && std::isspace(prog[0])) {
     prog.erase(0, 1);
     ++i;
   }
-  if (!std::isdigit(prog[0]) && prog.find_first_of("+-*/%^()") != std::string::npos) {
+  if (!prog.empty() && !std::isdigit(prog[0]) && prog.find_first_of("+-*/%^()") != std::string::npos) {
     token += prog[0];
     prog.erase(0, 1);
     ++i;
-  } else if (std::isalpha(prog[0])) {
+  } else if (!prog.empty() && std::isalpha(prog[0])) {
     while (!std::ispunct(prog[0]) && !std::isspace(prog[0])) {
       token += prog[0];
       prog.erase(0, 1);
       ++i;
     }
-  } else if (std::isdigit(prog[0])) {
+  } else if (!prog.empty() && std::isdigit(prog[0])) {
     while (prog[0] && !std::ispunct(prog[0]) && !std::isspace(prog[0])) {
       token += prog[0];
       prog.erase(0, 1);
       ++i;
     }
   }
+  // std::cout << "token: " << token << "\n";
   return token;
 }
 
 bool CalcModel::InsertTokenToStack(std::string token) {
+  std::cout << "insert: " << token << "\n";
   if (IsDelim(token[0]) || IsFunction(token)) {
     if (operators_stack_.empty()) {
       operators_stack_.push(token);
     } else {
       // Close brace
       if (token == ")") {
-        if (values_stack_.empty() || operators_stack_.empty()) return false;
+        std::cout << "-------- " << operators_stack_.top() << "\n";
+        if (values_stack_.empty() || operators_stack_.empty()) { return false; }
 
         while (!operators_stack_.empty() && operators_stack_.top() != "(") {
-          if (!values_stack_.empty()) {
-            values_stack_.pop();
-          }
           values_stack_.push(operators_stack_.top());
           operators_stack_.pop();
         }
 
-        if (!operators_stack_.empty() && operators_stack_.top() == "(") {
+        if (!operators_stack_.empty()) {
+          std::cout << "******* " << operators_stack_.top() << "\n";
           operators_stack_.pop();  // Pop the "("
         }
       } else {
-        if (GetOperatorPriority(operators_stack_.top()) == -1 ||
-            !GetOperatorPriority(token))
-          return false;
+        std::cout << "&&&&&&&&& " << token << "\n";
 
+        if (!operators_stack_.empty() && GetOperatorPriority(operators_stack_.top()) == -1 || GetOperatorPriority(token) == -1) {
+          return false;
+        }
         // While the priority of O2 is higher than or equal to O1, move from stack to RPN
+        std::cout << "TOKEN PR " << token << "  " << GetOperatorPriority(token) << "\n";
+        std::cout << "OP PR " << operators_stack_.top() << "  " << GetOperatorPriority(operators_stack_.top()) << "\n";
         while (!operators_stack_.empty() && operators_stack_.top() != "(" &&
-               GetOperatorPriority(operators_stack_.top()) >=
-                   GetOperatorPriority(token)) {
+               GetOperatorPriority(operators_stack_.top()) >= GetOperatorPriority(token)) {
           values_stack_.push(operators_stack_.top());
+          // operators_stack_.push(token);
+          std::cout << "@@@@@@ " << operators_stack_.top() << " " << token << "\n";
           operators_stack_.pop();
+          std::cout << "AAAA\n";
         }
         operators_stack_.push(token);
+        std::cout << "BBBB\n";
       }
     }
   } else {
@@ -429,6 +436,7 @@ int CalcModel::CountChars(const std::string& str, char c) {
 bool CalcModel::Calculate() {
   bool flag = true;
 
+  std::cout << "size: " << values_stack_.size() << "\n";
   while (values_stack_.size() > 0) {
     std::cout << "top: " << values_stack_.top() << "\n";
     if (CountChars(values_stack_.top(), ',') > 1 ||
@@ -538,7 +546,6 @@ bool CalcModel::ScanRpn(std::string& input) {
   // while (values_stack_.size() > 0) {
   //   std::cout << "STACK\n";
   //   std::cout << values_stack_.top() << "\n";
-  //   std::cout << "STACK\n";
   //   values_stack_.pop();
   // }
 
@@ -556,7 +563,7 @@ bool CalcModel::ScanRpn(std::string& input) {
 int main() {
   s21::CalcModel calc_model;
   std::string result;
-  std::string input = "90+10*10+5+5";
+  std::string input = "2*(1+3)";
   calc_model.ScanRpn(input);
   std::cout << "result" << calc_model.GetResult();
   return 0;
