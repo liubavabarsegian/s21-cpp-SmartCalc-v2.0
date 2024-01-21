@@ -31,25 +31,26 @@ int CalcModel::GetOperatorPriority(std::string op) {
     return -1;  // error: unknown operator
 }
 
-std::string CalcModel::GetToken(std::string &token, std::string &prog,
-                                size_t& i) {
+std::string CalcModel::GetToken(std::string &token, std::string &prog, size_t& i) {
   if (!token.empty()) { token.clear(); }
-  if (prog.empty()) return token;
+  if (prog.empty()) { return token; }
 
   while (!prog.empty() && std::isspace(prog[0])) {
     prog.erase(0, 1);
     ++i;
   }
-  if (!prog.empty() && !std::isdigit(prog[0]) && prog.find_first_of("+-*/%^()") != std::string::npos) {
-    token += prog[0];
-    prog.erase(0, 1);
-    ++i;
-  } else if (!prog.empty() && std::isalpha(prog[0])) {
-    while (!std::ispunct(prog[0]) && !std::isspace(prog[0])) {
+  if (!prog.empty() && std::isalpha(prog[0])) {
+    std::cout << "!!! " << prog[0] << "\n";
+    while (!prog.empty() && std::isalpha(prog[0])) {
       token += prog[0];
       prog.erase(0, 1);
       ++i;
     }
+  }else if (!prog.empty() && !std::isdigit(prog[0]) && prog.find_first_of("+-*/%^()") != std::string::npos) {
+    std::cout << "@@@@ " << prog[0] << "\n";
+    token += prog[0];
+    prog.erase(0, 1);
+    ++i;
   } else if (!prog.empty() && std::isdigit(prog[0])) {
     while (prog[0] && !std::ispunct(prog[0]) && !std::isspace(prog[0])) {
       token += prog[0];
@@ -57,7 +58,6 @@ std::string CalcModel::GetToken(std::string &token, std::string &prog,
       ++i;
     }
   }
-  // std::cout << "token: " << token << "\n";
   return token;
 }
 
@@ -563,8 +563,8 @@ bool CalcModel::ScanRpn(std::string& input) {
 int main() {
   s21::CalcModel calc_model;
   std::string result;
-  std::string input = "2*(1+3)";
+  std::string input = "sin(90)^2 + cos(90)^2";
   calc_model.ScanRpn(input);
-  std::cout << "result" << calc_model.GetResult();
+  std::cout << "result: " << calc_model.GetResult();
   return 0;
 }
