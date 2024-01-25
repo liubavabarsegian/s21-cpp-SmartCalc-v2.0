@@ -26,7 +26,7 @@ class CalcModel {
       return result_.top();}
     else {
       return 0; }
-    }
+  }
 
  private:
   std::stack<std::string> operators_stack_{};
