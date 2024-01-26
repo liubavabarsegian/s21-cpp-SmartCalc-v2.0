@@ -2,6 +2,11 @@
 
 namespace s21 {
 
+double CalcModel::GetResult() const noexcept { 
+  if (!result_.empty()) { return stod(result_.top());}
+  else { return 0; }
+}
+
 bool CalcModel::IsFunction(std::string str) noexcept {
   static const std::unordered_set<std::string> functions = {
       "sin", "cos", "tan", "asin", "acos", "atan", "sqrt", "log", "ln"};
@@ -433,7 +438,7 @@ int CalcModel::CountChars(const std::string& str, char c) {
   return std::count(str.begin(), str.end(), c);
 }
 
-bool CalcModel::Calculate() {
+bool CalcModel::CalculateResult() {
   bool flag = true;
 
   std::cout << "size: " << values_stack_.size() << "\n";
@@ -508,7 +513,7 @@ bool CalcModel::Unaries(std::string& input, std::string& dest) {
   return true;
 }
 
-bool CalcModel::ScanRpn(std::string& input) {
+bool CalcModel::Calculate(std::string &input) {
   if (input.empty()) {
     std::cerr << "Input string is empty." << std::endl;
     return false;
@@ -549,7 +554,7 @@ bool CalcModel::ScanRpn(std::string& input) {
   //   values_stack_.pop();
   // }
 
-  if (!Calculate()) {
+  if (!CalculateResult()) {
     std::cerr << "Failed to calculate result." << std::endl;
     return false;
   }
@@ -560,11 +565,11 @@ bool CalcModel::ScanRpn(std::string& input) {
 
 }  // namespace s21
 
-int main() {
-  s21::CalcModel calc_model;
-  std::string result;
-  std::string input = "sin(90)^2 + cos(90)^2";
-  calc_model.ScanRpn(input);
-  std::cout << "result: " << calc_model.GetResult();
-  return 0;
-}
+// int main() {
+//   s21::CalcModel calc_model;
+//   std::string result;
+//   std::string input = "sin(90)^2 + cos(90)^2";
+//   calc_model.ScanRpn(input);
+//   std::cout << "result: " << calc_model.GetResult();
+//   return 0;
+// }

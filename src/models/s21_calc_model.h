@@ -20,20 +20,15 @@ class CalcModel {
   CalcModel() {};
   virtual ~CalcModel() {};
   bool Dijkstra(std::string& input);
-  bool ScanRpn(std::string& input);
-  std::string GetResult() { 
-    if (!result_.empty()) {
-      return result_.top();}
-    else {
-      return 0; }
-  }
+  bool Calculate(std::string& input);
+  double GetResult() const noexcept;
 
  private:
   std::stack<std::string> operators_stack_{};
   std::stack<std::string> values_stack_{};
   std::stack<std::string> result_{};
-  bool IsFunction(std::string str) noexcept;
-  bool IsDelim(char c) noexcept;
+  bool IsFunction(std::string str) noexcept ;
+  bool IsDelim(char c) noexcept ;
   int GetOperatorPriority(std::string);
   std::string GetToken(std::string &token, std::string &prog, size_t& i);
   bool InsertTokenToStack(std::string token);
@@ -54,7 +49,7 @@ class CalcModel {
   bool LogFunc();
   bool CountFunction();
   int CountChars(const std::string& str, char c);
-  bool Calculate();
+  bool CalculateResult();
   bool Unaries(std::string& input, std::string& dest);
 };
 
