@@ -130,29 +130,27 @@ TEST(CalcTest, SmartCalc14) {
   EXPECT_EQ(status, false);
 }
 
-// TEST(CalcTest, SmartCalc15) {
-//   s21::CalcModel a;
-//   std::string input =  "^0.999";
-//   bool status = a.Calculate(input);
-//   EXPECT_EQ(a.GetResult(), 0);
-//   EXPECT_EQ(status, false);
-// }
+TEST(CalcTest, SmartCalc15) {
+  s21::CalcModel a;
+  std::string input =  "^0.999";
+  bool status = a.Calculate(input);
+  EXPECT_EQ(status, false);
+}
 
-// TEST(CalcTest, SmartCalc16) {
-//   s21::CalcModel a;
-//   std::string input =  "ln(-100)";
-//   bool status = a.Calculate(input);
-//   EXPECT_EQ(a.GetResult(), 0);
-//   EXPECT_EQ(status, false);
-// }
+TEST(CalcTest, SmartCalc16) {
+  s21::CalcModel a;
+  std::string input =  "ln(-100)";
+  a.Calculate(input);
+  EXPECT_TRUE(std::isnan(a.GetResult()));
+}
 
-// TEST(CalcTest, SmartCalc17) {
-//   s21::CalcModel a;
-//   std::string input =  "asin(-100)";
-//   bool status = a.Calculate(input);
-//   EXPECT_EQ(a.GetResult(), 0);
-//   EXPECT_EQ(status, false);
-// }
+TEST(CalcTest, SmartCalc17) {
+  s21::CalcModel a;
+  std::string input = "asin(-10)";
+  bool status = a.Calculate(input);
+  EXPECT_TRUE(std::isnan(a.GetResult()));
+  EXPECT_EQ(status, true);
+}
 
 TEST(CalcTest, SmartCalc18) {
   s21::CalcModel a;
@@ -162,39 +160,40 @@ TEST(CalcTest, SmartCalc18) {
   EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
 }
 
-// TEST(CalcTest, SmartCalc19) {
-//   s21::CalcModel a;
-//   std::string input = "sin(5.89*67)-cos(4.99)-log(45.78)";
-//   double result_real = sin(5.89*67)-cos(4.99)-log(45.78);
-//   a.Calculate(input);
-//   EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
-// }
+TEST(CalcTest, SmartCalc19) {
+  s21::CalcModel a;
+  std::string input = "sin(5.89*67)-cos(4.99)-log(45.78)";
+  double result_real = sin(5.89*67)-cos(4.99)-log10(45.78);
+  a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
+}
 
-// TEST(CalcTest, SmartCalc20) {
-//   s21::CalcModel a;
-//   std::string input =  "sin(5.8*67)";
-//   double result_real = sin(5.8 * 67);
-//   bool status = a.Calculate(input);
-//   EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
-//   EXPECT_EQ(status, true);
-// }
+TEST(CalcTest, SmartCalc20) {
+  s21::CalcModel a;
+  std::string input =  "sin(5.8*67)";
+  double result_real = sin(5.8 * 67);
+  bool status = a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
+  EXPECT_EQ(status, true);
+}
 
-// TEST(CalcTest, SmartCalc21) {
-//   s21::CalcModel a;
-//   std::string input =  "cos(5.8*67)";
-//   bool status = a.Calculate(input);
-//   EXPECT_EQ(a.GetResult(), 0);
-//   EXPECT_EQ(status, false);
-// }
+TEST(CalcTest, SmartCalc21) {
+  s21::CalcModel a;
+  std::string input =  "cos(5.8*67)";
+  double result_real = cos(5.8*67);
+  bool status = a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
+  EXPECT_EQ(status, true);
+}
 
-// TEST(CalcTest, SmartCalc22) {
-//   s21::CalcModel a;
-//   std::string input =  "asin(0.2)";
-//   double result_real = asin(0.2);
-//   bool status = a.Calculate(input);
-//   EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
-//   EXPECT_EQ(status, true);
-// }
+TEST(CalcTest, SmartCalc22) {
+  s21::CalcModel a;
+  std::string input =  "asin(0.2)";
+  double result_real = asin(0.2);
+  bool status = a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
+  EXPECT_EQ(status, true);
+}
 
 TEST(CalcTest, SmartCalc23) {
   s21::CalcModel a;
@@ -228,13 +227,13 @@ TEST(CalcTest, SmartCalc26) {
   EXPECT_EQ(status, false);
 }
 
-// TEST(CalcTest, SmartCalc27) {
-//   s21::CalcModel a;
-//   std::string input = "1/0";
-//   bool status = a.Calculate(input);
-//   EXPECT_EQ(a.GetResult(), 0);
-//   EXPECT_EQ(status, false);
-// }
+TEST(CalcTest, SmartCalc27) {
+  s21::CalcModel a;
+  std::string input = "1/0";
+  bool status = a.Calculate(input);
+  EXPECT_TRUE(std::isinf(a.GetResult()));
+  EXPECT_EQ(status, true);
+}
 
 TEST(CalcTest, SmartCalc28) {
   s21::CalcModel a;
@@ -269,27 +268,22 @@ TEST(CalcTest, SmartCalc31) {
   EXPECT_EQ(status, false);
 }
 
+TEST(CalcTest, SmartCalc32) {
+  s21::CalcModel a;
+  std::string input = "tan(atan(0.5)) + acos(0.05 - 0.003) - cos(3^(2)) - ln(107-cos(sin(3.14)))";
+  double result_real = tan(atan(0.5)) + acos(0.05 - 0.003) - cos(pow(3, 2)) - log(107 - cos(sin(3.14)));
+  bool status = a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
+  EXPECT_EQ(status, true);
+}
 
-// TEST(CalcTest, SmartCalc32) {
-//   s21::CalcModel a;
-//   std::string input = "tan(atan(0.5)) + acos(0.05 - 0.003) - cos(3^(2)) - "
-//       "ln(107-cos(sin(3.14)))";
-//   double result_real = tan(atan(0.5)) + acos(0.05 - 0.003) - cos(pow(3, 2)) -
-//                        log(107 - cos(sin(3.14)));
-//   bool status = a.Calculate(input);
-//   EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
-//   EXPECT_EQ(status, true);
-// }
-
-
-// TEST(CalcTest, SmartCalc33) {
-//   s21::CalcModel a;
-//   std::string input =  "-ln(100)";
-//   double result_real = - log(100);
-//   bool status = a.Calculate(input);
-//   EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
-//   EXPECT_EQ(status, true);
-// }
+TEST(CalcTest, SmartCalc33) {
+  s21::CalcModel a;
+  std::string input = "-log(10)";
+  double result_real = -log10(10);
+  a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
+}
 
 TEST(CalcTest, SmartCalc34) {
   s21::CalcModel a;
@@ -300,25 +294,24 @@ TEST(CalcTest, SmartCalc34) {
   EXPECT_EQ(status, true);
 }
 
-// TEST(CalcTest, SmartCalc35) {
-//   s21::CalcModel a;
-//   std::string input = "sin(500) + cos(-200) - tan(15) - atan(0.33) + acos(-1) * asin(1) + "
-//                       "ln(sqrt(144))";
-//   double result_real = sin(500) + cos(-200) - tan(15) - atan(0.33) +
-//                        acos(-1) * asin(1) + log(sqrt(144));
-//   bool status = a.Calculate(input);
-//   EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
-//   EXPECT_EQ(status, true);
-// }
+TEST(CalcTest, SmartCalc35) {
+  s21::CalcModel a;
+  std::string input = "sin(500) + cos(-200) - tan(15) - atan(0.33) + acos(-1) * asin(1) + "
+                      "ln(sqrt(144))";
+  double result_real = sin(500) + cos(-200) - tan(15) - atan(0.33) +
+                       acos(-1) * asin(1) + log(sqrt(144));
+  bool status = a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
+  EXPECT_EQ(status, true);
+}
 
-// TEST(CalcTest, SmartCalc36) {
-//   s21::CalcModel a;
-//   std::string input =  "log(-10)";
-//   double result_real = log(-10);
-//   bool status = a.Calculate(input);
-//   EXPECT_NEAR(a.GetResult(), result_real, 1e-6);
-//   EXPECT_EQ(status, true);
-// }
+TEST(CalcTest, SmartCalc36) {
+  s21::CalcModel a;
+  std::string input =  "log(-10)";
+  bool status = a.Calculate(input);
+  EXPECT_TRUE(std::isnan(a.GetResult()));
+  EXPECT_EQ(status, true);
+}
 
 TEST(CalcTest, SmartCalc37) {
   s21::CalcModel a;

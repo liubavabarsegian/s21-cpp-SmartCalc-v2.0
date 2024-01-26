@@ -167,10 +167,6 @@ bool CalcModel::Division() {
   double operand1 = stod(result_.top());
   result_.pop();
 
-  if (operand2 == 0.0) {
-    return false;
-  }
-
   double result = operand1 / operand2;
 
   result_.push(std::to_string(result));
@@ -346,6 +342,7 @@ bool CalcModel::Square() {
 
 bool CalcModel::LnFunc() {
   if (result_.empty()) {
+    
     return false;
   }
 
@@ -443,22 +440,21 @@ bool CalcModel::CalculateResult() {
   std::cout << "size: " << values_stack_.size() << "\n";
   while (values_stack_.size() > 0) {
     std::cout << "top: " << values_stack_.top() << "\n";
-    if (CountChars(values_stack_.top(), ',') > 1 ||
-         CountChars(values_stack_.top(), '.') > 1) {
+    if (CountChars(values_stack_.top(), ',') > 1 || CountChars(values_stack_.top(), '.') > 1) {
       flag = false;
       break;
     } 
     else if (IsDelim(values_stack_.top()[0]) ||
                IsFunction(values_stack_.top())) {
       flag = CountFunction();
-      // values_stack_.pop();
+      
       if (!flag) break;
     } else {
       result_.push(values_stack_.top());
       values_stack_.pop();
     }
   }
-
+  
   return flag;
 }
 
@@ -550,13 +546,6 @@ bool CalcModel::Calculate(std::string &input) {
   }
   values_stack_ = reversed_stack_;
 
-  // std::cout << "STACK\n";
-  // while (values_stack_.size() > 0) {
-  //   std::cout << "STACK\n";
-  //   std::cout << values_stack_.top() << "\n";
-  //   values_stack_.pop();
-  // }
-
   if (!CalculateResult()) {
     std::cerr << "Failed to calculate result." << std::endl;
     return false;
@@ -567,13 +556,3 @@ bool CalcModel::Calculate(std::string &input) {
 
 }  // namespace s21
 
-// int main() {
-//   s21::CalcModel calc_model;
-//   std::string result;
-//   std::string input =  "sin(5.89*67)-cos(4.99)-log(45.78)";
-//   double real =  sin(5.89*67)-cos(4.99)-log(45.78);
-//   calc_model.Calculate(input);
-//   std::cout << "result: " << calc_model.GetResult() << "\n";
-//   std::cout << "real: " << real;
-//   return 0;
-// }
