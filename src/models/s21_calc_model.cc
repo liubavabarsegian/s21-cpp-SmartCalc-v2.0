@@ -52,12 +52,11 @@ std::string CalcModel::GetToken(std::string &token, std::string &prog, size_t& i
       ++i;
     }
   }else if (!prog.empty() && !std::isdigit(prog[0]) && prog.find_first_of("+-*/%^()") != std::string::npos) {
-    std::cout << "@@@@ " << prog[0] << "\n";
     token += prog[0];
     prog.erase(0, 1);
     ++i;
   } else if (!prog.empty() && std::isdigit(prog[0])) {
-    while (prog[0] && !std::ispunct(prog[0]) && !std::isspace(prog[0])) {
+    while (prog[0] && (!std::ispunct(prog[0]) || prog[0] == '.' || prog[0] == ',') && !std::isspace(prog[0])) {
       token += prog[0];
       prog.erase(0, 1);
       ++i;
@@ -89,7 +88,7 @@ bool CalcModel::InsertTokenToStack(std::string token) {
       } else {
         std::cout << "&&&&&&&&& " << token << "\n";
 
-        if (!operators_stack_.empty() && GetOperatorPriority(operators_stack_.top()) == -1 || GetOperatorPriority(token) == -1) {
+        if (!operators_stack_.empty() && (GetOperatorPriority(operators_stack_.top()) == -1 || GetOperatorPriority(token) == -1)) {
           return false;
         }
         // While the priority of O2 is higher than or equal to O1, move from stack to RPN
@@ -477,7 +476,7 @@ bool CalcModel::Unaries(std::string& input, std::string& dest) {
       return false;
     }
 
-    if ((prev_token.empty() || (IsDelim(prev_token[0]) && prev_token != "(")) &&
+    if ((prev_token.empty() || (IsDelim(prev_token[0]) )) &&
             (token == "+" || token == "-")) {
       if (prev_token == "+" && (token == "+"))
         return false;
@@ -488,11 +487,15 @@ bool CalcModel::Unaries(std::string& input, std::string& dest) {
       else if (prev_token == "-" && token == "-")
         return false;
       else {
-        copy += '(';
-        copy += '0';
-        copy += token[0];
+        std::string temp_token = token;
         tmp = input.substr(i);
         GetToken(token, tmp, i);
+        if (IsFunction(token)) {
+          copy += '+';
+        }
+        copy += '(';
+        copy += '0';
+        copy += temp_token[0];
         if (IsFunction(token)) {
           copy += '1';
           copy += ')';
@@ -559,7 +562,6 @@ bool CalcModel::Calculate(std::string &input) {
     return false;
   }
 
-  std::cout << "ops: " << operators_stack_.empty();
   return true;
 }
 
@@ -568,8 +570,10 @@ bool CalcModel::Calculate(std::string &input) {
 // int main() {
 //   s21::CalcModel calc_model;
 //   std::string result;
-//   std::string input = "sin(90)^2 + cos(90)^2";
-//   calc_model.ScanRpn(input);
-//   std::cout << "result: " << calc_model.GetResult();
+//   std::string input =  "sin(5.89*67)-cos(4.99)-log(45.78)";
+//   double real =  sin(5.89*67)-cos(4.99)-log(45.78);
+//   calc_model.Calculate(input);
+//   std::cout << "result: " << calc_model.GetResult() << "\n";
+//   std::cout << "real: " << real;
 //   return 0;
 // }

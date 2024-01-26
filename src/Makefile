@@ -1,8 +1,8 @@
 NAME = smart_calc.a
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -std=c11
-SRCS = s21_smart_calc/*.c
-TEST_SRCS = tests/*.c
+CXX = g++
+CXXFLAGS = -Wall -Wextra -Werror -std=c++17
+SRCS = models/s21_calc_model.cc controllers/s21_calc_controller.cc
+TEST_SRCS = tests/tests.cc
 
 # Используемые папки
 SOURCE_DIR=s21_smart_calc
@@ -15,7 +15,7 @@ DIST_DIR=SmartCalc_v1.0
 
 EXECUTABLE:= /bin/bin
 
-TEST_FLAGS = -lcheck -lm -lpthread
+TEST_FLAGS =  -lgtest -lgtest_main -pthreads
 GCOV_FLAGS = -ftest-coverage -fprofile-arcs
 UNAME_S = $(shell uname -s)
 
@@ -26,21 +26,21 @@ endif
 all: clean_all test install
 
 ${NAME}:
-	$(CC) $(CFLAGS) -c ${SRCS}
+	$(CXX) $(CXXFLAGS) -c ${SRCS}
 	ar rc $(NAME) *.o
 	ranlib $(NAME)
 	rm *.o
 
 test: rebuild
-	$(CC) $(CFLAGS) -c ${TEST_SRCS}
-	$(CC) $(CFLAGS) *.o ${NAME} ${TEST_FLAGS}  -o test
+	$(CXX) $(CXXFLAGS) -c ${TEST_SRCS}
+	$(CXX) $(CXXFLAGS) *.o ${NAME} ${TEST_FLAGS}  -o test
 	./test
 
 gcov_report: 
 	make clean
-	$(CC) $(CFLAGS) -c ${TEST_SRCS}
-	$(CC)  $(CFLAGS) $(GCOV_FLAGS) -c ${SRCS}
-	$(CC)  $(CFLAGS) $(GCOV_FLAGS) *.o $(TEST_FLAGS) -o test
+	$(CXX) $(CXXFLAGS) -c ${TEST_SRCS}
+	$(CXX)  $(CXXFLAGS) $(GCOV_FLAGS) -c ${SRCS}
+	$(CXX)  $(CXXFLAGS) $(GCOV_FLAGS) *.o $(TEST_FLAGS) -o test
 	./test
 	lcov -t "test" -o test.info -c -d .
 	genhtml -o report test.info
