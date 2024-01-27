@@ -1,11 +1,9 @@
-#include "qcustomplot.h"
-#include "s21_calc_view.ui"
-#include "s21_cacl_view.h"
+#include "calc_view.h"
 
-CaclView::CaclView(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::CaclView) {
-  ui->setupUi(this);
-
+CalcView::CalcView(QWidget *parent) : QWidget(parent) , ui(new Ui::CalcView)
+{
+    ui->setupUi(this);
+    
   connect(ui->pushButton_0, &QPushButton::clicked, this,
           [this] { append(ui->pushButton_0->text()); });
   connect(ui->pushButton_1, &QPushButton::clicked, this,
@@ -66,8 +64,8 @@ CaclView::CaclView(QWidget *parent)
           [this] { append("log("); });
 
   connect(ui->pushButton_backspace, &QPushButton::clicked, this,
-          &CaclView::clicked_backspace);
-  connect(ui->pushButton_AC, &QPushButton::clicked, this, &CaclView::clear);
+          &CalcView::clicked_backspace);
+  connect(ui->pushButton_AC, &QPushButton::clicked, this, &CalcView::clear);
   connect(ui->pushButton_x, &QPushButton::clicked, this,
           [this] { append("x"); });
   connect(ui->pushButton_equal, &QPushButton::clicked, this,
@@ -79,9 +77,9 @@ CaclView::CaclView(QWidget *parent)
   ui->customPlot->yAxis->setRange(-10, 10);
 }
 
-CaclView::~CaclView() { delete ui; }
+CalcView::~CalcView() { delete ui; }
 
-void CaclView::Append(QString text) {
+void CalcView::Append(QString text) {
   if ((text == "+" || text == "-") &&
       (ui->textEdit->toPlainText().endsWith("+") ||
        ui->textEdit->toPlainText().endsWith("-"))) {
@@ -92,11 +90,11 @@ void CaclView::Append(QString text) {
     ui->textEdit->setText(ui->textEdit->toPlainText() + text);
 }
 
-void CaclView::BackspaceClicked() {
+void CalcView::BackspaceClicked() {
   ui->textEdit->setText(ui->textEdit->toPlainText().remove(-1, 1));
 }
 
-void CaclView::Equal() {
+void CalcView::Equal() {
   QString input = ui->textEdit->toPlainText();
   if (input.contains("x")) {
     int i = 0;
@@ -146,7 +144,7 @@ void CaclView::Equal() {
   }
 }
 
-void CaclView::ShowGraphic() {
+void CalcView::ShowGraphic() {
   ui->customPlot->clearGraphs();
   ui->customPlot->legend->setVisible(true);
   ui->customPlot->legend->setFont(QFont("Helvetica", 9));
@@ -200,9 +198,10 @@ void CaclView::ShowGraphic() {
   Y.clear();
 }
 
-void CaclView::Clear() {
+void CalcView::Clear() {
   ui->textEdit->setText("");
   ui->inputX->setText("");
   ui->customPlot->clearGraphs();
   ui->customPlot->replot();
 }
+

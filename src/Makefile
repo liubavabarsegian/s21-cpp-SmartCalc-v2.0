@@ -1,7 +1,7 @@
 NAME = smart_calc.a
 CXX = g++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++17
-SRCS = models/s21_calc_model.cc controllers/s21_calc_controller.cc
+SRCS = models/s21_calc_model.cc controllers/s21_calc_controller.cc views/calc_view.cc main.cpp
 TEST_SRCS = tests/tests.cc
 
 # Используемые папки
@@ -17,7 +17,6 @@ EXECUTABLE:= /bin/bin
 
 TEST_FLAGS =  -lgtest -lgtest_main -pthreads
 GCOV_FLAGS = -ftest-coverage -fprofile-arcs
-UNAME_S = $(shell uname -s)
 
 ifeq ($(shell uname), Linux)
 	TEST_FLAGS += -lrt -lsubunit
@@ -68,7 +67,6 @@ dist:
 	tar cvzf Archive_SmartCalc_v1.0.tgz Archive_SmartCalc_v1.0/
 	mv Archive_SmartCalc_v1.0.tgz $(HOME)/Desktop/
 	rm -rf Archive_SmartCalc_v1.0/
-
 
 rebuild: clean ${NAME}
 
