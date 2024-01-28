@@ -2,12 +2,12 @@
 
 namespace s21 {
 
-void s21::CalcController::Calculate(std::string &input) {
+bool s21::CalcController::Calculate(std::string &input) {
   try {
-    calc_model->Calculate(input);
+    return calc_model->Calculate(input);
   } catch (const std::exception &e) {
     throw std::runtime_error(e.what());
+    return false;
   }
 }
-
 }  // namespace s21
