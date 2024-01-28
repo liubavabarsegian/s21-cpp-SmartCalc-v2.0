@@ -11,18 +11,22 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    controllers/s21_calc_controller.cc \
-    models/s21_calc_model.cc \
+    ../controllers/s21_calc_controller.cc \
+    ../models/s21_calc_model.cc \
     main.cpp \
-    views/calc_view.cc
+    mainwindow.cpp
+    qcustomplot.cpp
 
 HEADERS += \
-    views/calc_view.h \
-    controllers/s21_calc_controller.h \
-    models/s21_calc_model.h \
+    # calc_view.h \
+    ../controllers/s21_calc_controller.h \
+    ../models/s21_calc_model.h \
+    mainwindow.h
+    qcustomplot.h
 
 FORMS += \
-    views/calc_view.ui
+    mainwindow.ui
+    ui_mainwindow.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

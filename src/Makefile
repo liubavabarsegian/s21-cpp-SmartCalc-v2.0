@@ -1,7 +1,7 @@
 NAME = smart_calc.a
 CXX = g++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++17
-SRCS = models/s21_calc_model.cc controllers/s21_calc_controller.cc views/calc_view.cc main.cpp
+SRCS = models/s21_calc_model.cc #controllers/s21_calc_controller.cc views/calc_view.cc main.cpp
 TEST_SRCS = tests/tests.cc
 
 # Используемые папки
@@ -50,7 +50,7 @@ install:
 	rm -rf build
 	mkdir build
 	make ${NAME}
-	cd s21_smart_calc && qmake ../s21_smart_calc/s21_smart_calc.pro && make && make clean && rm Makefile && cd ../ && mv s21_smart_calc/s21_smart_calc build
+	cd qt && qmake ../qt/s21_smart_calc.pro && make && make clean && rm Makefile && cd ../ && mv qt/s21_smart_calc.app build
 uninstall:
 	rm -rf build
 
@@ -75,6 +75,7 @@ clean:
 	rm -rf *.o *.a *.out s21_smart_calc/.qmake.stash s21_smart_calc/*.user
 	rm -rf *.gcda *.gcno *.info *.gch
 	rm -rf test report
+	rm -rf qt/s21_smart_calc.app qt/*.o qt/*.user qt/Makefile qt/moc* qt/*.stash
 
 clean_all: 
 	make clean
