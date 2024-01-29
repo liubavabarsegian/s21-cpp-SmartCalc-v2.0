@@ -1,10 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent, s21::CalcController *calc_controller) :
+MainWindow::MainWindow(QWidget *parent, s21::CalcController *calc_controller, s21::CreditView *credit_calc_view) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    controller(calc_controller)
+    controller(calc_controller),
+    credit_view(credit_calc_view)
 {
     ui->setupUi(this);
 
@@ -76,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent, s21::CalcController *calc_controller) :
             [this] { Equal(); });
     connect(ui->show_graphic, &QPushButton::clicked, this,
             [this] { ShowGraphic(); });
+
+    connect(ui->pushButton_credit, &QPushButton::clicked, this, [this] { this->credit_view->show(); });
 
     ui->customPlot->xAxis->setRange(-5, 5);
     ui->customPlot->yAxis->setRange(-10, 10);
