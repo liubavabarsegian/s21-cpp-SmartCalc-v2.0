@@ -14,19 +14,20 @@ SOURCES += \
     ../controllers/s21_calc_controller.cc \
     ../models/s21_calc_model.cc \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
     qcustomplot.cpp
 
 HEADERS += \
     # calc_view.h \
     ../controllers/s21_calc_controller.h \
     ../models/s21_calc_model.h \
-    mainwindow.h
+    mainwindow.h \
     qcustomplot.h
 
 FORMS += \
     mainwindow.ui
     ui_mainwindow.h
+    
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

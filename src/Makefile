@@ -1,7 +1,7 @@
 NAME = smart_calc.a
 CXX = g++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++17
-SRCS = models/s21_calc_model.cc #controllers/s21_calc_controller.cc views/calc_view.cc main.cpp
+SRCS = models/s21_calc_model.cc 
 TEST_SRCS = tests/tests.cc
 
 # Используемые папки

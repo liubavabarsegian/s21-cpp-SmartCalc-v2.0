@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include "../controllers/s21_calc_controller.h"
-#include "qcustomplot.h"
-#include "../controllers/s21_calc_controller.h"
+// #include "qcustomplot.h"
+
 namespace Ui {
 class MainWindow;
 }

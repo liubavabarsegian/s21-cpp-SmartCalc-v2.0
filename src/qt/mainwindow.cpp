@@ -77,8 +77,8 @@ MainWindow::MainWindow(QWidget *parent, s21::CalcController *calc_controller) :
     connect(ui->show_graphic, &QPushButton::clicked, this,
             [this] { ShowGraphic(); });
 
-    // ui->customPlot->xAxis->setRange(-5, 5);
-    // ui->customPlot->yAxis->setRange(-10, 10);
+    ui->customPlot->xAxis->setRange(-5, 5);
+    ui->customPlot->yAxis->setRange(-10, 10);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -153,7 +153,7 @@ void MainWindow::Equal() {
 }
 
 void MainWindow::ShowGraphic() {
-/*    ui->customPlot->clearGraphs();
+    ui->customPlot->clearGraphs();
     ui->customPlot->legend->setVisible(true);
     ui->customPlot->legend->setFont(QFont("Helvetica", 9));
     ui->customPlot->setLocale(QLocale(QLocale::English, QLocale::UnitedKingdom));
@@ -181,34 +181,36 @@ void MainWindow::ShowGraphic() {
                 "The input is too long! Input no more than 255 symbols");
             break;
         } else {
-            char result[255] = "";
-            int flag = scan_rpn((char *)formula.toStdString().c_str(), result);
-            if (flag == SUCCESS) {
-                if (strcmp(result, "nan") == 0 || strcmp(result, "-nan") == 0) {
-                    formula = temp;
-                    continue;
+                bool status;
+                std::string formulaString = formula.toStdString();
+                status = controller->Calculate(formulaString);
+                if (!status) {
+                        ui->textEdit->setText("Incorrect input!");
+                        break;
                 }
-                X.push_back(x1);
-                Y.push_back(atof(result));
-            } else {
-                ui->textEdit->setText("Incorrect input!");
-                break;
-            }
-            formula = temp;
-            ui->customPlot->graph(0)->addData(X, Y);
-            ui->customPlot->xAxis->setRange(-5, 5);
-            ui->customPlot->yAxis->setRange(-10, 10);
-            ui->customPlot->replot();
-        }*/
-    // }
-    // X.clear();
-    // Y.clear();
+                else {
+                        if (controller->GetResult() == "nan" || controller->GetResult() == "-nan" ) {
+                                formula = temp;
+                                continue;
+                        }
+                        X.push_back(x1);
+                        Y.push_back(std::stold(controller->GetResult()));
+                        formula = temp;
+                        ui->customPlot->graph(0)->addData(X, Y);
+                        ui->customPlot->xAxis->setRange(-5, 5);
+                        ui->customPlot->yAxis->setRange(-10, 10);
+                        ui->customPlot->replot();
+                }   
+        }
+    }
+    X.clear();
+    Y.clear();
 }
 
 void MainWindow::Clear() {
     ui->textEdit->setText("");
     ui->inputX->setText("");
-    // ui->customPlot->clearGraphs();
-    // ui->customPlot->replot();
+    ui->customPlot->clearGraphs();
+    ui->customPlot->replot();
 }
 

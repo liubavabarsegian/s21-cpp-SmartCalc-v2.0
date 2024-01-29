@@ -3,7 +3,7 @@
 namespace s21 {
 
 double CalcModel::GetResult() const noexcept { 
-  if (!result_.empty()) { return stod(result_.top());}
+  if (!result_.empty()) { return stold(result_.top());}
   else { return 0; }
 }
 
@@ -143,10 +143,10 @@ bool CalcModel::Sum() {
     return false;
   }
 
-  double operand1 = stod(result_.top());
+  double operand1 = stold(result_.top());
   result_.pop();
 
-  double operand2 = stod(result_.top());
+  double operand2 = stold(result_.top());
   result_.pop();
 
   double result = operand1 + operand2;
@@ -161,10 +161,10 @@ bool CalcModel::Division() {
     return false;
   }
 
-  double operand2 = stod(result_.top());
+  double operand2 = stold(result_.top());
   result_.pop();
 
-  double operand1 = stod(result_.top());
+  double operand1 = stold(result_.top());
   result_.pop();
 
   double result = operand1 / operand2;
@@ -178,10 +178,10 @@ bool CalcModel::Multiplication() {
     return false;
   }
 
-  double operand1 = stod(result_.top());
+  double operand1 = stold(result_.top());
   result_.pop();
 
-  double operand2 = stod(result_.top());
+  double operand2 = stold(result_.top());
   result_.pop();
 
   double result = operand1 * operand2;
@@ -195,10 +195,10 @@ bool CalcModel::Difference() {
     return false;
   }
 
-  double operand2 = stod(result_.top());
+  double operand2 = stold(result_.top());
   result_.pop();
 
-  double operand1 = stod(result_.top());
+  double operand1 = stold(result_.top());
   result_.pop();
 
   double result = operand1 - operand2;
@@ -213,10 +213,10 @@ bool CalcModel::Mod() {
     return false;
   }
 
-  double operand2 = stod(result_.top());
+  double operand2 = stold(result_.top());
   result_.pop();
 
-  double operand1 = stod(result_.top());
+  double operand1 = stold(result_.top());
   result_.pop();
 
   double result = fmod(operand1, operand2);
@@ -230,10 +230,10 @@ bool CalcModel::Power() {
     return false;
   }
 
-  double exponent = stod(result_.top());
+  double exponent = stold(result_.top());
   result_.pop();
 
-  double base = stod(result_.top());
+  double base = stold(result_.top());
   result_.pop();
 
   double result = pow(base, exponent);
@@ -247,7 +247,7 @@ bool CalcModel::Sinus() {
     return false;
   }
 
-  double angle = stod(result_.top());
+  double angle = stold(result_.top());
   result_.pop();
 
   double result = sin(angle);
@@ -261,7 +261,7 @@ bool CalcModel::Cosinus() {
     return false;
   }
 
-  double angle = stod(result_.top());
+  double angle = stold(result_.top());
   result_.pop();
 
   double result = cos(angle);
@@ -275,7 +275,7 @@ bool CalcModel::Tangent() {
     return false;
   }
 
-  double angle = stod(result_.top());
+  double angle = stold(result_.top());
   result_.pop();
 
   double result = tan(angle);
@@ -289,7 +289,7 @@ bool CalcModel::Atangent() {
     return false;
   }
 
-  double value = stod(result_.top());
+  double value = stold(result_.top());
   result_.pop();
 
   double result = atan(value);
@@ -303,7 +303,7 @@ bool CalcModel::Asinus() {
     return false;
   }
 
-  double value = stod(result_.top());
+  double value = stold(result_.top());
   result_.pop();
 
   double result = asin(value);
@@ -317,7 +317,7 @@ bool CalcModel::Acosinus() {
     return false;
   }
 
-  double value = stod(result_.top());
+  double value = stold(result_.top());
   result_.pop();
 
   double result = acos(value);
@@ -331,7 +331,7 @@ bool CalcModel::Square() {
     return false;
   }
 
-  double value = stod(result_.top());
+  double value = stold(result_.top());
   result_.pop();
 
   double result = sqrt(value);
@@ -346,7 +346,7 @@ bool CalcModel::LnFunc() {
     return false;
   }
 
-  double value = stod(result_.top());
+  double value = stold(result_.top());
   result_.pop();
 
   double result = log(value);
@@ -360,7 +360,7 @@ bool CalcModel::LogFunc() {
     return false;
   }
 
-  double value = stod(result_.top());
+  double value = stold(result_.top());
   result_.pop();
 
   double result = log10(value);
@@ -411,7 +411,7 @@ bool CalcModel::CountFunction() {
     flag = LogFunc();
   }
 
-  if (stod(result_.top()) != floor(stod(result_.top()))) {
+  if (stold(result_.top()) != floor(stold(result_.top()))) {
     std::string resultString = result_.top();
     size_t i = resultString.length() - 1;
 
