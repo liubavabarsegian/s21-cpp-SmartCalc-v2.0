@@ -3,13 +3,14 @@
 #define SMARTCALC_CPP_SRC_MODEL_CREDITCALCULATOR_H
 
 #include <time.h>
+
 #include <cmath>
 
 class CreditCalculator {
  public:
   CreditCalculator() = default;
-     CreditCalculator( double loan, int period, double rate)
-    : loan_(loan), period_(period), rate_(rate) {};
+  CreditCalculator(double loan, int period, double rate)
+      : loan_(loan), period_(period), rate_(rate){};
   ~CreditCalculator() = default;
 
   void SetStartValues(double loan, int period, double rate);

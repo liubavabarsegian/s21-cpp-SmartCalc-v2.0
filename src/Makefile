@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++17
 SRCS = models/s21_calc_model.cc 
 TEST_SRCS = tests/tests.cc
-
+STYLE_SRCS = controllers/* models/* qt/*.cc qt/*.h tests/*.cc
 # Используемые папки
 SOURCE_DIR=s21_smart_calc
 TSOURCES_DIR=tests
@@ -58,15 +58,21 @@ dvi:
 	open dvi.html
 
 dist:
-	rm -rf Archive_SmartCalc_v1.0/
-	mkdir Archive_SmartCalc_v1.0/
-	mkdir Archive_SmartCalc_v1.0/src
-	mkdir Archive_SmartCalc_v1.0/src/s21_smart_calc
-	cp Makefile s21_smart_calc/*.c s21_smart_calc/*.h dvi.html Archive_SmartCalc_v1.0/src/
-	cp s21_smart_calc/*.h s21_smart_calc/*.pro s21_smart_calc/*.cpp s21_smart_calc/*.ui s21_smart_calc/*.user Archive_SmartCalc_v1.0/src/s21_smart_calc/ 
-	tar cvzf Archive_SmartCalc_v1.0.tgz Archive_SmartCalc_v1.0/
-	mv Archive_SmartCalc_v1.0.tgz $(HOME)/Desktop/
-	rm -rf Archive_SmartCalc_v1.0/
+	rm -rf Archive_SmartCalc_v2.0/
+	mkdir Archive_SmartCalc_v2.0/
+	mkdir Archive_SmartCalc_v2.0/src
+	mkdir Archive_SmartCalc_v2.0/src/controllers/
+	mkdir Archive_SmartCalc_v2.0/src/models/
+	mkdir Archive_SmartCalc_v2.0/src/qt/
+	mkdir Archive_SmartCalc_v2.0/src/tests/
+	cp Makefile dvi.html Archive_SmartCalc_v2.0/src/
+	cp controllers/*.cc controllers/*.h Archive_SmartCalc_v2.0/src/controllers/
+	cp models/*.cc models/*.h Archive_SmartCalc_v2.0/src/models/
+	cp qt/*.cc qt/*.h qt/*.pro qt/*.ui Archive_SmartCalc_v2.0/src/qt/
+	cp tests/*.cc Archive_SmartCalc_v2.0/src/tests/
+	tar cvzf Archive_SmartCalc_v2.0.tgz Archive_SmartCalc_v2.0/
+	mv Archive_SmartCalc_v2.0.tgz $(HOME)/Desktop/
+	rm -rf Archive_SmartCalc_v2.0/
 
 rebuild: clean ${NAME}
 
@@ -82,10 +88,10 @@ clean_all:
 	rm -rf build
 
 style: 
-	clang-format --style=google ${SRCS}  ${SOURCE_DIR}/*.cpp ${SOURCE_DIR}/*.h ${TEST_SRCS} -n
+	clang-format --style=google ${STYLE_SRCS} -n
 
 correct_style: 
-	clang-format --style=google ${SRCS} ${SOURCE_DIR}/*.cpp ${SOURCE_DIR}/*.h ${TEST_SRCS} -i
+	clang-format --style=google ${STYLE_SRCS} -i
 
 installqt:
 	sudo apt update

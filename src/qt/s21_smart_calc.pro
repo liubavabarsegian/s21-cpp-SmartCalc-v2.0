@@ -13,13 +13,12 @@ CONFIG += c++17
 SOURCES += \
     ../controllers/s21_calc_controller.cc \
     ../models/s21_calc_model.cc \
-    creditview.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    qcustomplot.cpp \
+    creditview.cc \
+    main.cc \
+    mainwindow.cc \
+    qcustomplot.cc \
     ../controllers/s21_credit_controller.cc \
     ../models/s21_credit_calc.cc \
-    # ../controllers/s21_deposit_controller.cc
 
 HEADERS += \
     ../controllers/s21_calc_controller.h \
@@ -29,7 +28,6 @@ HEADERS += \
     qcustomplot.h \
     ../controllers/s21_credit_controller.h \
     ../models/s21_credit_calc.h \
-    # ../controllers/s21_deposit_controller.h
 
 FORMS += \
     creditview.ui \

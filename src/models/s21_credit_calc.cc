@@ -1,6 +1,6 @@
 #include "s21_credit_calc.h"
 
-void CreditCalculator::SetStartValues(double loan,  int period,  double rate) {
+void CreditCalculator::SetStartValues(double loan, int period, double rate) {
   loan_ = loan;
   period_ = period;
   rate_ = rate;
@@ -14,7 +14,8 @@ void CreditCalculator::CalcAnnuity() {
 
 void CreditCalculator::CalcDifferentiated() {
   double Sn = loan_ / period_;
-  double percent = rate_ / 100 * (days_in_year_ / months_in_year_) / days_in_year_;
+  double percent =
+      rate_ / 100 * (days_in_year_ / months_in_year_) / days_in_year_;
   total_payment_ = 0;
 
   for (int i = 0; i < period_; i++) {
