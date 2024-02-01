@@ -1,36 +1,25 @@
-#ifndef CREDIT_H
-#define CREDIT_H
+#ifndef SMARTCALC_CPP_SRC_CONTROLLERCREDIT_H
+#define SMARTCALC_CPP_SRC_CONTROLLERCREDIT_H
 
-#include <QWidget>
-#include <QtWidgets/QLineEdit>
-
-#include "s21_calc_controller.h"
-
-namespace Ui {
-class Credit;
-}
+#include "../models/s21_credit_calc.h"
 
 namespace s21 {
-class Credit : public QWidget {
-  Q_OBJECT
-
+class CreditController {
  public:
-  explicit Credit(QWidget *parent = nullptr);
-  ~Credit();
+  CreditController() = default;
+  ~CreditController() = default;
 
- private slots:
-  void on_pushButton_calculate_clicked();
+  void SetStartValues( double loan,  double period,  double rate);
+  void CalcAnnuity();
+  void CalcDifferentiated();
+  double GetMonthPayment();
+  double GetOverpayment();
+  double GetTotalPayment();
+  double GetFirstPayment();
+  double GetLastPayment();
 
  private:
-  Ui::Credit *ui;
-  CalcController controller;
-  double total_credit_amount = 0.0;
-  int term = 0;
-  double interest_rate = 0.0;
-  bool flag = false;  // false = annuity / true = differentiated
-  double overpay = 0.0;
-  double total_payment = 0.0;
-  double payment_mouth = 0.0;
+  CreditCalculator credit_calc;
 };
-} // namespace s21
-#endif  // CREDIT_H
+}
+#endif  // SMARTCALC_CPP_SRC_CONTROLLERCREDIT_H

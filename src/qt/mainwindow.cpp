@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent, s21::CalcController *calc_controller, s21::CreditView *credit_calc_view) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    controller(calc_controller),
-    credit_view(credit_calc_view)
+    ui(new Ui::MainWindow)
 {
+    s21::CalcModel calc_model;
+    calc_controller = new s21::CalcController();
+    credit_view = new s21::CreditView();
+
     ui->setupUi(this);
 
     connect(ui->pushButton_0, &QPushButton::clicked, this,
@@ -78,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent, s21::CalcController *calc_controller, s2
     connect(ui->show_graphic, &QPushButton::clicked, this,
             [this] { ShowGraphic(); });
 
-    connect(ui->pushButton_credit, &QPushButton::clicked, this, [this] { this->credit_view->show(); });
+    connect(ui->pushButton_credit, &QPushButton::clicked, this, [this] { ShowCreditView(); });
 
     ui->customPlot->xAxis->setRange(-5, 5);
     ui->customPlot->yAxis->setRange(-10, 10);
@@ -128,12 +130,12 @@ void MainWindow::Equal() {
             {
                 bool status;
                 std::string inputString = input.toStdString();
-                status = controller->Calculate(inputString);
+                status = calc_controller->Calculate(inputString);
                 if (!status) {
                     ui->textEdit->setText("Incorrect input!");
                 }
                 else {
-                    ui->textEdit->setText(QString::fromLocal8Bit(controller->GetResult().c_str()));
+                    ui->textEdit->setText(QString::fromLocal8Bit(calc_controller->GetResult().c_str()));
                 }
             }
         }
@@ -144,12 +146,12 @@ void MainWindow::Equal() {
         } else {
             bool status;
             std::string inputString = input.toStdString();
-            status = controller->Calculate(inputString);
+            status = calc_controller->Calculate(inputString);
             if (!status) {
                 ui->textEdit->setText("Incorrect input!");
             }
             else {
-                ui->textEdit->setText(QString::fromLocal8Bit(controller->GetResult().c_str()));
+                ui->textEdit->setText(QString::fromLocal8Bit(calc_controller->GetResult().c_str()));
             }
         }
     }
@@ -186,18 +188,18 @@ void MainWindow::ShowGraphic() {
         } else {
                 bool status;
                 std::string formulaString = formula.toStdString();
-                status = controller->Calculate(formulaString);
+                status = calc_controller->Calculate(formulaString);
                 if (!status) {
                         ui->textEdit->setText("Incorrect input!");
                         break;
                 }
                 else {
-                        if (controller->GetResult() == "nan" || controller->GetResult() == "-nan" ) {
+                        if (calc_controller->GetResult() == "nan" || calc_controller->GetResult() == "-nan" ) {
                                 formula = temp;
                                 continue;
                         }
                         X.push_back(x1);
-                        Y.push_back(std::stold(controller->GetResult()));
+                        Y.push_back(std::stold(calc_controller->GetResult()));
                         formula = temp;
                         ui->customPlot->graph(0)->addData(X, Y);
                         ui->customPlot->xAxis->setRange(-5, 5);
@@ -217,3 +219,6 @@ void MainWindow::Clear() {
     ui->customPlot->replot();
 }
 
+void MainWindow::ShowCreditView() {
+    this->credit_view->show();
+}

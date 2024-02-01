@@ -1,31 +1,21 @@
 #include "s21_credit_controller.h"
-// #include "ui_credit.h"
 
-using namespace s21;
-
-Credit::Credit(QWidget *parent) : QWidget(parent), ui(new Ui::Credit) {
-  ui->setupUi(this);
+namespace s21 {
+void CreditController::SetStartValues( double loan,  double period,  double rate) {
+  credit_calc.SetStartValues(loan, period, rate);
 }
 
-Credit::~Credit() { delete ui; }
+void CreditController::CalcAnnuity() { credit_calc.CalcAnnuity(); }
 
-void Credit::on_pushButton_calculate_clicked() {
-  // clear
-  ui->inputOverpaymentLine->clear();
-  ui->inputTotalPaymentLine->clear();
-  ui->listViewMountlyPayment->reset();
+void CreditController::CalcDifferentiated() { credit_calc.CalcDifferentiated(); }
 
-  // get values
-  total_credit_amount =
-      ui->inputTotalCreditAMountLine->toPlainText().toDouble();
-  term = ui->inputTermLine->toPlainText().toInt();
-  interest_rate = ui->inputInterestRateLine->toPlainText().toDouble();
-  flag = ui->checkBoxDifferentiated->isChecked();
+double CreditController::GetMonthPayment() { return credit_calc.GetMonthPayment(); }
 
-  // set values
-  controller.FindCredit(total_credit_amount, term, interest_rate, flag, overpay,
-                        total_payment, payment_mouth,
-                        &ui->listViewMountlyPayment);
-  ui->inputOverpaymentLine->setText(QString::number(overpay));
-  ui->inputTotalPaymentLine->setText(QString::number(total_payment));
+double CreditController::GetOverpayment() { return credit_calc.GetOverpayment(); }
+
+double CreditController::GetTotalPayment() { return credit_calc.GetTotalPayment(); }
+
+double CreditController::GetFirstPayment() { return credit_calc.GetFirstPayment(); }
+
+double CreditController::GetLastPayment() { return credit_calc.GetLastPayment(); }
 }

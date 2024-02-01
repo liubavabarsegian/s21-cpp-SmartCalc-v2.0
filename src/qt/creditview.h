@@ -2,6 +2,7 @@
 #define CREDITVIEW_H
 
 #include <QWidget>
+#include "../controllers/s21_credit_controller.h"
 
 namespace Ui {
 class CreditView;
@@ -18,6 +19,8 @@ public:
 
 private:
     Ui::CreditView *ui;
+    s21::CreditController *credit_controller;
+    void Calculate();
 };
 } //namespace s21
 
