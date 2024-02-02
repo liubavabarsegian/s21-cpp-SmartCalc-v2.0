@@ -7,14 +7,14 @@ class CreditController {
   CreditController() = default;
   ~CreditController() = default;
 
-  void SetStartValues(double loan, double period, double rate);
+  void SetStartValues(long double loan, long double period, long double rate);
   void CalcAnnuity();
   void CalcDifferentiated();
-  double GetMonthPayment();
-  double GetOverpayment();
-  double GetTotalPayment();
-  double GetFirstPayment();
-  double GetLastPayment();
+  long double GetMonthPayment();
+  long double GetOverpayment();
+  long double GetTotalPayment();
+  long double GetFirstPayment();
+  long double GetLastPayment();
 
  private:
   CreditCalculator credit_calc;

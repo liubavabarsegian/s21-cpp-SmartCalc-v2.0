@@ -82,7 +82,7 @@ clean:
 	rm -rf *.o *.a *.out s21_smart_calc/.qmake.stash s21_smart_calc/*.user
 	rm -rf *.gcda *.gcno *.info *.gch
 	rm -rf test report
-	rm -rf qt/s21_smart_calc.app qt/*.o qt/*.user qt/Makefile qt/moc* qt/.qmake.stash build/
+	rm -rf qt/s21_smart_calc.app qt/*.o qt/*.pro.user qt/Makefile qt/moc* qt/.qmake.stash build/
 
 clean_all: 
 	make clean

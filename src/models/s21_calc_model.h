@@ -20,7 +20,7 @@ class CalcModel {
   virtual ~CalcModel(){};
   bool Dijkstra(std::string& input);
   bool Calculate(std::string& input);
-  double GetResult() const noexcept;
+  long double GetResult() const noexcept;
 
  private:
   std::stack<std::string> operators_stack_{};

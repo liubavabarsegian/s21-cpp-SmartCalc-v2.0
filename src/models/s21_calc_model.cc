@@ -2,9 +2,9 @@
 
 namespace s21 {
 
-double CalcModel::GetResult() const noexcept {
+long double CalcModel::GetResult() const noexcept {
   if (!result_.empty()) {
-    return stold(result_.top());
+    return std::stold(result_.top());
   } else {
     return 0;
   }
@@ -53,7 +53,6 @@ std::string CalcModel::GetToken(std::string& token, std::string& prog,
     ++i;
   }
   if (!prog.empty() && std::isalpha(prog[0])) {
-    std::cout << "!!! " << prog[0] << "\n";
     while (!prog.empty() && std::isalpha(prog[0])) {
       token += prog[0];
       prog.erase(0, 1);
@@ -77,14 +76,12 @@ std::string CalcModel::GetToken(std::string& token, std::string& prog,
 }
 
 bool CalcModel::InsertTokenToStack(std::string token) {
-  std::cout << "insert: " << token << "\n";
   if (IsDelim(token[0]) || IsFunction(token)) {
     if (operators_stack_.empty()) {
       operators_stack_.push(token);
     } else {
       // Close brace
       if (token == ")") {
-        std::cout << "-------- " << operators_stack_.top() << "\n";
         if (values_stack_.empty() || operators_stack_.empty()) {
           return false;
         }
@@ -95,12 +92,9 @@ bool CalcModel::InsertTokenToStack(std::string token) {
         }
 
         if (!operators_stack_.empty()) {
-          std::cout << "******* " << operators_stack_.top() << "\n";
           operators_stack_.pop();  // Pop the "("
         }
       } else {
-        std::cout << "&&&&&&&&& " << token << "\n";
-
         if (!operators_stack_.empty() &&
             (GetOperatorPriority(operators_stack_.top()) == -1 ||
              GetOperatorPriority(token) == -1)) {
@@ -108,22 +102,14 @@ bool CalcModel::InsertTokenToStack(std::string token) {
         }
         // While the priority of O2 is higher than or equal to O1, move from
         // stack to RPN
-        std::cout << "TOKEN PR " << token << "  " << GetOperatorPriority(token)
-                  << "\n";
-        std::cout << "OP PR " << operators_stack_.top() << "  "
-                  << GetOperatorPriority(operators_stack_.top()) << "\n";
         while (!operators_stack_.empty() && operators_stack_.top() != "(" &&
                GetOperatorPriority(operators_stack_.top()) >=
                    GetOperatorPriority(token)) {
           values_stack_.push(operators_stack_.top());
           // operators_stack_.push(token);
-          std::cout << "@@@@@@ " << operators_stack_.top() << " " << token
-                    << "\n";
           operators_stack_.pop();
-          std::cout << "AAAA\n";
         }
         operators_stack_.push(token);
-        std::cout << "BBBB\n";
       }
     }
   } else {
@@ -146,7 +132,6 @@ bool CalcModel::Dijkstra(std::string& input) {
     if (token.empty() || !InsertTokenToStack(token)) {
       return false;
     }
-    std::cout << "TOKEN" << token << std::endl;
   }
 
   std::string delim;
@@ -165,16 +150,15 @@ bool CalcModel::Sum() {
     return false;
   }
 
-  double operand1 = stold(result_.top());
+  long double operand1 = stold(result_.top());
   result_.pop();
 
-  double operand2 = stold(result_.top());
+  long double operand2 = stold(result_.top());
   result_.pop();
 
-  double result = operand1 + operand2;
+  long double result = operand1 + operand2;
 
   result_.push(std::to_string(result));
-  std::cout << "SUM res " << result_.top() << "\n";
   return true;
 }
 
@@ -183,13 +167,13 @@ bool CalcModel::Division() {
     return false;
   }
 
-  double operand2 = stold(result_.top());
+  long double operand2 = stold(result_.top());
   result_.pop();
 
-  double operand1 = stold(result_.top());
+  long double operand1 = stold(result_.top());
   result_.pop();
 
-  double result = operand1 / operand2;
+  long double result = operand1 / operand2;
 
   result_.push(std::to_string(result));
   return true;
@@ -200,13 +184,13 @@ bool CalcModel::Multiplication() {
     return false;
   }
 
-  double operand1 = stold(result_.top());
+  long double operand1 = stold(result_.top());
   result_.pop();
 
-  double operand2 = stold(result_.top());
+  long double operand2 = stold(result_.top());
   result_.pop();
 
-  double result = operand1 * operand2;
+  long double result = operand1 * operand2;
 
   result_.push(std::to_string(result));
   return true;
@@ -217,16 +201,15 @@ bool CalcModel::Difference() {
     return false;
   }
 
-  double operand2 = stold(result_.top());
+  long double operand2 = stold(result_.top());
   result_.pop();
 
-  double operand1 = stold(result_.top());
+  long double operand1 = stold(result_.top());
   result_.pop();
 
-  double result = operand1 - operand2;
+  long double result = operand1 - operand2;
 
   result_.push(std::to_string(result));
-  std::cout << "DIFF res " << result_.top() << "\n";
   return true;
 }
 
@@ -235,13 +218,13 @@ bool CalcModel::Mod() {
     return false;
   }
 
-  double operand2 = stold(result_.top());
+  long double operand2 = stold(result_.top());
   result_.pop();
 
-  double operand1 = stold(result_.top());
+  long double operand1 = stold(result_.top());
   result_.pop();
 
-  double result = fmod(operand1, operand2);
+  long double result = fmod(operand1, operand2);
 
   result_.push(std::to_string(result));
   return true;
@@ -252,13 +235,13 @@ bool CalcModel::Power() {
     return false;
   }
 
-  double exponent = stold(result_.top());
+  long double exponent = stold(result_.top());
   result_.pop();
 
-  double base = stold(result_.top());
+  long double base = stold(result_.top());
   result_.pop();
 
-  double result = pow(base, exponent);
+  long double result = pow(base, exponent);
 
   result_.push(std::to_string(result));
   return true;
@@ -269,10 +252,10 @@ bool CalcModel::Sinus() {
     return false;
   }
 
-  double angle = stold(result_.top());
+  long double angle = stold(result_.top());
   result_.pop();
 
-  double result = sin(angle);
+  long double result = sin(angle);
 
   result_.push(std::to_string(result));
   return true;
@@ -283,10 +266,10 @@ bool CalcModel::Cosinus() {
     return false;
   }
 
-  double angle = stold(result_.top());
+  long double angle = stold(result_.top());
   result_.pop();
 
-  double result = cos(angle);
+  long double result = cos(angle);
 
   result_.push(std::to_string(result));
   return true;
@@ -297,10 +280,10 @@ bool CalcModel::Tangent() {
     return false;
   }
 
-  double angle = stold(result_.top());
+  long double angle = stold(result_.top());
   result_.pop();
 
-  double result = tan(angle);
+  long double result = tan(angle);
 
   result_.push(std::to_string(result));
   return true;
@@ -311,10 +294,10 @@ bool CalcModel::Atangent() {
     return false;
   }
 
-  double value = stold(result_.top());
+  long double value = stold(result_.top());
   result_.pop();
 
-  double result = atan(value);
+  long double result = atan(value);
 
   result_.push(std::to_string(result));
   return true;
@@ -325,10 +308,10 @@ bool CalcModel::Asinus() {
     return false;
   }
 
-  double value = stold(result_.top());
+  long double value = stold(result_.top());
   result_.pop();
 
-  double result = asin(value);
+  long double result = asin(value);
 
   result_.push(std::to_string(result));
   return true;
@@ -339,10 +322,10 @@ bool CalcModel::Acosinus() {
     return false;
   }
 
-  double value = stold(result_.top());
+  long double value = stold(result_.top());
   result_.pop();
 
-  double result = acos(value);
+  long double result = acos(value);
 
   result_.push(std::to_string(result));
   return true;
@@ -353,10 +336,10 @@ bool CalcModel::Square() {
     return false;
   }
 
-  double value = stold(result_.top());
+  long double value = stold(result_.top());
   result_.pop();
 
-  double result = sqrt(value);
+  long double result = sqrt(value);
 
   result_.push(std::to_string(result));
   return true;
@@ -367,10 +350,10 @@ bool CalcModel::LnFunc() {
     return false;
   }
 
-  double value = stold(result_.top());
+  long double value = stold(result_.top());
   result_.pop();
 
-  double result = log(value);
+  long double result = log(value);
 
   result_.push(std::to_string(result));
   return true;
@@ -381,10 +364,10 @@ bool CalcModel::LogFunc() {
     return false;
   }
 
-  double value = stold(result_.top());
+  long double value = stold(result_.top());
   result_.pop();
 
-  double result = log10(value);
+  long double result = log10(value);
 
   result_.push(std::to_string(result));
   return true;
@@ -445,7 +428,6 @@ bool CalcModel::CountFunction() {
     }
 
     result_.top() = resultString.substr(0, i + 1);
-    std::cout << "res:" << result_.top();
   }
 
   return flag;
@@ -458,9 +440,7 @@ int CalcModel::CountChars(const std::string& str, char c) {
 bool CalcModel::CalculateResult() {
   bool flag = true;
 
-  std::cout << "size: " << values_stack_.size() << "\n";
   while (values_stack_.size() > 0) {
-    std::cout << "top: " << values_stack_.top() << "\n";
     if (CountChars(values_stack_.top(), ',') > 1 ||
         CountChars(values_stack_.top(), '.') > 1) {
       flag = false;
@@ -545,12 +525,10 @@ bool CalcModel::Calculate(std::string& input) {
   }
 
   std::string processedInput;
-  std::cout << "input" << input << std::endl;
   if (!Unaries(input, processedInput)) {
     std::cerr << "Failed to process unary operators." << std::endl;
     return false;
   }
-  std::cout << "processed: " << processedInput << std::endl;
 
   if (!Dijkstra(processedInput)) {
     std::cerr << "Failed to convert to RPN." << std::endl;

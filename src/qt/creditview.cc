@@ -18,9 +18,9 @@ void CreditView::Calculate() {
   ui->overpayment_val->setText("");
   ui->total_payment_val->setText("");
 
-  const double period = ui->period_val->text().toDouble();
-  const double loan = ui->amount_val->text().toDouble();
-  const double rate = ui->interest_rate->text().toDouble();
+  const long double period = ui->period_val->text().toDouble();
+  const long double loan = ui->amount_val->text().toDouble();
+  const long double rate = ui->interest_rate->text().toDouble();
 
   credit_controller->SetStartValues(loan, period, rate);
   if (ui->annuity->isChecked()) {

@@ -1,6 +1,7 @@
 #include "s21_credit_calc.h"
 
-void CreditCalculator::SetStartValues(double loan, int period, double rate) {
+void CreditCalculator::SetStartValues(long double loan, int period,
+                                      long double rate) {
   loan_ = loan;
   period_ = period;
   rate_ = rate;
@@ -13,13 +14,13 @@ void CreditCalculator::CalcAnnuity() {
 }
 
 void CreditCalculator::CalcDifferentiated() {
-  double Sn = loan_ / period_;
-  double percent =
+  long double Sn = loan_ / period_;
+  long double percent =
       rate_ / 100 * (days_in_year_ / months_in_year_) / days_in_year_;
   total_payment_ = 0;
 
   for (int i = 0; i < period_; i++) {
-    double payment = Sn + (loan_ - i * Sn) * percent;
+    long double payment = Sn + (loan_ - i * Sn) * percent;
     if (i == 0) {
       first_payment_ = payment;
     } else {
@@ -31,9 +32,9 @@ void CreditCalculator::CalcDifferentiated() {
   overpayment_ = total_payment_ - loan_;
 }
 
-double CreditCalculator::CalcMonthAnnuity() {
-  double month_rate = rate_ / 12.0 / 100.0;
-  double temp = std::pow((1 + month_rate), period_);
+long double CreditCalculator::CalcMonthAnnuity() {
+  long double month_rate = rate_ / 12.0 / 100.0;
+  long double temp = std::pow((1 + month_rate), period_);
 
   return loan_ * month_rate * temp / (temp - 1);
 }

@@ -356,3 +356,19 @@ TEST(CalcTest, SmartCalc41) {
   EXPECT_EQ(a.GetResult(), 0);
   EXPECT_EQ(status, false);
 }
+
+TEST(CalcTest, SmartCalc42) {
+  s21::CalcModel a;
+  std::string input = "9.9919";
+  bool status = a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), 9.9919, 1e-6);
+  EXPECT_EQ(status, true);
+}
+
+TEST(CalcTest, SmartCalc43) {
+  s21::CalcModel a;
+  std::string input = "1/3";
+  bool status = a.Calculate(input);
+  EXPECT_NEAR(a.GetResult(), 1 / 3.0, 1e-6);
+  EXPECT_EQ(status, true);
+}

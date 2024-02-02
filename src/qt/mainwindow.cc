@@ -108,12 +108,12 @@ void MainWindow::Equal() {
   if (input.contains("x")) {
     int i = 0;
     while (ui->inputX->text().toStdString().c_str()[i]) {
-      if (ui->inputX->text().toStdString().c_str()[i] != ',' &&
-          ui->inputX->text().toStdString().c_str()[i] != '.' &&
+      if (ui->inputX->text().toStdString().c_str()[i] != '.' &&
+          ui->inputX->text().toStdString().c_str()[i] != ',' &&
           ui->inputX->text().toStdString().c_str()[i] != '-' &&
           ui->inputX->text().toStdString().c_str()[i] != '+' &&
-          (ui->inputX->text().toStdString().c_str()[i] <= '0' ||
-           ui->inputX->text().toStdString().c_str()[i] >= '9')) {
+          (ui->inputX->text().toStdString().c_str()[i] < '0' ||
+           ui->inputX->text().toStdString().c_str()[i] > '9')) {
         ui->inputX->setText("Incorrect!");
         break;
       }
